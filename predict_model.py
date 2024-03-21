@@ -60,4 +60,4 @@ def Pre_LinearRegression(fpath):
             theta = new_theta
         return theta
     optimized_theta = optimize_theta(X_with_intercept, y_train, theta)
-    return optimized_theta
+    return optimized_theta, X_with_intercept
