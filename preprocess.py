@@ -54,7 +54,7 @@ def Preprocess_RandomForest(fpath):
     # 选择重要性大于阈值的特征
     threshold = np.mean(feature_importances)  # 阈值设置为平均值
     # threshold = 0.05 # 自定义阈值
-    print("threshold:", threshold)
+    #print("threshold:", threshold)
     selected_features_indexs = [index for index, importance in enumerate(feature_importances) if importance > threshold]
     '''
     for index in selected_features_indexs:

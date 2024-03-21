@@ -41,14 +41,14 @@ def Pre_LinearRegression(fpath):
     def compute_gradient(X, y, theta):
         y_pred = np.dot(X, theta)
         errors = y_pred - y # 残差
-        gradient = 2 * np.dot(X.T, errors) / X.shape[0]
+        gradient = 2 * np.dot(X.T, errors).astype(np.float64) / X.shape[0]
         return gradient # grad(J(theta))
 
     # 优化更新公式theta_i+1 = theta_i - learning_rate * gradient
-    def optimize_theta(theta):
+    def optimize_theta(X_with_intercept, y_train, theta):
         # 设置梯度下降参数
-        learning_rate = 0.1 # 学习率
-        max_iter = 1000 # 迭代次数
+        learning_rate = 1e-8  # 学习率
+        max_iter = 1000  # 迭代次数
         tolerance = 1e-5
         # 梯度下降优化
         for i in range(max_iter):
@@ -59,4 +59,5 @@ def Pre_LinearRegression(fpath):
                 break
             theta = new_theta
         return theta
-    return optimize_theta(theta)
+    optimized_theta = optimize_theta(X_with_intercept, y_train, theta)
+    return optimized_theta
