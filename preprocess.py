@@ -19,6 +19,7 @@ def Preprocess_RandomForest(fpath):
     '''
 
     # 提取特征和目标变量
+    #X = df_interpolated.drop(columns=['钻时(min/m)', '套压(Mpa)', '转盘转速(r/min)', '纯钻时间h', '井深（m）'])
     X = df_interpolated.drop(columns=['钻时(min/m)', '套压(Mpa)', '转盘转速(r/min)', '纯钻时间h'])
     y = df_interpolated['钻时(min/m)']
 

@@ -19,16 +19,16 @@ print(min_values)
 print(max_values)
 print(bounds)
 '''
-
+print("线性预测模型系数:", coefficients)
 
 def linear_function(x, coefficient=coefficients):
     return np.dot(coefficient[1:], x) + coefficient[0]  # 线性函数的计算
 
 
-def pso_optimizer_linear(linear_function, bounds, num_dimensions, num_particles, max_iter=5, w=0.5, c1=1.5, c2=1.5):
+def pso_optimizer_linear(linear_function, bounds, num_dimensions, num_particles, max_iter=10, w=0.5, c1=1.5, c2=1.5):
     # 初始化粒子群
     # particles = np.random.uniform(bounds[0], bounds[1], (num_particles, num_dimensions))
-    particles = np.empty((num_particles, num_dimensions))
+    particles = np.abs(np.random.rand(num_particles, num_dimensions))
     for d in range(num_dimensions):
         lower_bound = bounds[0][d]
         upper_bound = bounds[1][d]
@@ -48,13 +48,13 @@ def pso_optimizer_linear(linear_function, bounds, num_dimensions, num_particles,
             velocities[i] = w * velocities[i] + c1 * r1 * (personal_best_positions[i] - particles[i]) + \
                             c2 * r2 * (global_best_position - particles[i])
             particles[i] += velocities[i]
+            particles[i] = np.maximum(particles[i], 0)  # 将负值设置为零
 
             # 确保粒子位置在边界内
-            for i in range(num_particles):
-                for d in range(num_dimensions):
-                    lower_bound = bounds[0, d]
-                    upper_bound = bounds[1, d]
-                    particles[:, d] = np.clip(particles[:, d],lower_bound, upper_bound)
+            for d in range(num_dimensions):
+                lower_bound = bounds[0, d]
+                upper_bound = bounds[1, d]
+                particles[i, d] = np.clip(particles[i, d], lower_bound, upper_bound)
 
         # 更新个体最佳位置和全局最佳位置
         values = np.array([linear_function(p) for p in particles])
@@ -66,7 +66,10 @@ def pso_optimizer_linear(linear_function, bounds, num_dimensions, num_particles,
             global_best_index = np.argmin(personal_best_values)
             global_best_position = personal_best_positions[global_best_index]
             global_best_value = personal_best_values[global_best_index]
-
+        '''
+        global_best_position = np.maximum(global_best_position, 0)  # 将负值设置为零
+        global_best_value = np.maximum(global_best_value, 0)
+        '''
     return global_best_position, global_best_value
 
 
