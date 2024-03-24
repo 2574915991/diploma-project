@@ -1,3 +1,5 @@
+from sklearn.preprocessing import StandardScaler
+
 from predict_model import Pre_LinearRegression
 import numpy as np
 
@@ -21,11 +23,12 @@ print(bounds)
 '''
 print("线性预测模型系数:", coefficients)
 
+
 def linear_function(x, coefficient=coefficients):
     return np.dot(coefficient[1:], x) + coefficient[0]  # 线性函数的计算
 
 
-def pso_optimizer_linear(linear_function, bounds, num_dimensions, num_particles, max_iter=10, w=0.5, c1=1.5, c2=1.5):
+def pso_optimizer_linear(linear_function, bounds, num_dimensions, num_particles, max_iter=200, w=0.5, c1=1.5, c2=1.5):
     # 初始化粒子群
     # particles = np.random.uniform(bounds[0], bounds[1], (num_particles, num_dimensions))
     particles = np.abs(np.random.rand(num_particles, num_dimensions))
@@ -76,5 +79,5 @@ def pso_optimizer_linear(linear_function, bounds, num_dimensions, num_particles,
 # 使用粒子群优化算法求解线性多元函数最小值
 best_position, best_value = pso_optimizer_linear(linear_function, bounds, num_dimensions, num_particles)
 
-print("最优解 x:", best_position)
+print("最优解(标准化) x:", best_position)
 print("最优值 f(x):", best_value)

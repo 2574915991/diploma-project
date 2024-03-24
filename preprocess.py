@@ -5,6 +5,8 @@ import random
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
+from sklearn.preprocessing import StandardScaler
+
 
 # preprocess为预处理函数,fpath为待预处理文件路径
 def Preprocess_RandomForest(fpath):
@@ -31,12 +33,19 @@ def Preprocess_RandomForest(fpath):
     '''
     feature_list = list(feature_index_mapping.items())
 
+
+
     # 建立模型
     rf_regressor = RandomForestRegressor(n_estimators=100, random_state=random.randint(1, 1000))
 
-    # 训练模型
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2,
                                                         random_state=random.randint(1, 1000))  # 划分训练集和测试集
+    # 归一化
+    #scaler = StandardScaler()
+    #X_scaled = scaler.fit_transform(X_train)
+
+    # 训练模型
+    #rf_regressor.fit(X_scaled, y_train)
     rf_regressor.fit(X_train, y_train)
 
     '''
@@ -63,7 +72,7 @@ def Preprocess_RandomForest(fpath):
             f"Select_Feature Index:{index} Feature_name: {feature_list[index]} Feature_importance: {feature_list[index]}")
     '''
     X_selected = X[X.columns[selected_features_indexs].tolist()]
-    #print(X_selected)
+    print(X_selected)
     return X_selected, y # 返回挑选的X, y
 '''
 X_selected, y = Preprocess_RandomForest("C:/Users/25749/Desktop/钻井数据/井A_工程参数深度数据 - 副本.xls")

@@ -4,6 +4,7 @@ import numpy as np
 from sklearn.metrics import mean_squared_error
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression, SGDRegressor
+from sklearn.preprocessing import StandardScaler
 
 from preprocess import Preprocess_RandomForest
 
@@ -26,9 +27,14 @@ def Pre_LinearRegression(fpath):
     mse = mean_squared_error(y_test, y_pred)
     print("Mean Squared Error:", mse)
     '''
+    # 归一化
+    scaler = StandardScaler()
+    X_scaled = scaler.fit_transform(X_train)
+
     # 参数优化部分
     # y = w0+w1*x1+ ... +wn*xn 添加一列全为1的列作为截距项x0
-    X_with_intercept = np.c_[np.ones((X_train.shape[0], 1)), X_train]
+    X_with_intercept_unscaled = np.c_[np.ones((X_train.shape[0], 1)), X_train]
+    X_with_intercept = np.c_[np.ones((X_train.shape[0], 1)), X_scaled]
     # 初始化模型参数
     theta = np.random.randn(X_with_intercept.shape[1])
     '''
@@ -60,4 +66,4 @@ def Pre_LinearRegression(fpath):
             theta = new_theta
         return theta
     optimized_theta = optimize_theta(X_with_intercept, y_train, theta)
-    return optimized_theta, X_with_intercept
+    return optimized_theta, X_with_intercept_unscaled
