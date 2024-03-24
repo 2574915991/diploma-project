@@ -79,5 +79,5 @@ def pso_optimizer_linear(linear_function, bounds, num_dimensions, num_particles,
 # 使用粒子群优化算法求解线性多元函数最小值
 best_position, best_value = pso_optimizer_linear(linear_function, bounds, num_dimensions, num_particles)
 
-print("最优解(标准化) x:", best_position)
+print("最优解 x:", best_position)
 print("最优值 f(x):", best_value)
