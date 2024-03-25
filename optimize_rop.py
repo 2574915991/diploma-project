@@ -1,3 +1,4 @@
+from matplotlib import pyplot as plt
 from sklearn.preprocessing import StandardScaler
 
 from predict_model import Pre_LinearRegression
@@ -28,10 +29,11 @@ def linear_function(x, coefficient=coefficients):
     return np.dot(coefficient[1:], x) + coefficient[0]  # 线性函数的计算
 
 
-def pso_optimizer_linear(linear_function, bounds, num_dimensions, num_particles, max_iter=200, w=0.5, c1=1.5, c2=1.5):
+def pso_optimizer_linear(linear_function, bounds, num_dimensions, num_particles, max_iter=100, w=0.5, c1=1.5, c2=1.5):
     # 初始化粒子群
-    # particles = np.random.uniform(bounds[0], bounds[1], (num_particles, num_dimensions))
-    particles = np.abs(np.random.rand(num_particles, num_dimensions))
+    #particles = np.random.uniform(bounds[0], bounds[1], (num_particles, num_dimensions))
+    particles = np.abs(np.random.randn(num_particles, num_dimensions))
+    #particles = np.empty((num_particles, num_dimensions))
     for d in range(num_dimensions):
         lower_bound = bounds[0][d]
         upper_bound = bounds[1][d]
@@ -43,6 +45,7 @@ def pso_optimizer_linear(linear_function, bounds, num_dimensions, num_particles,
     global_best_position = personal_best_positions[global_best_index]
     global_best_value = personal_best_values[global_best_index]
 
+    iteration_best_values = []  # 记录每次迭代的最佳值
     # 迭代优化
     for _ in range(max_iter):
         # 更新速度和位置
@@ -69,15 +72,24 @@ def pso_optimizer_linear(linear_function, bounds, num_dimensions, num_particles,
             global_best_index = np.argmin(personal_best_values)
             global_best_position = personal_best_positions[global_best_index]
             global_best_value = personal_best_values[global_best_index]
+
+        iteration_best_values.append(global_best_value)
         '''
         global_best_position = np.maximum(global_best_position, 0)  # 将负值设置为零
         global_best_value = np.maximum(global_best_value, 0)
         '''
-    return global_best_position, global_best_value
+    return global_best_position, global_best_value, iteration_best_values
 
 
 # 使用粒子群优化算法求解线性多元函数最小值
-best_position, best_value = pso_optimizer_linear(linear_function, bounds, num_dimensions, num_particles)
+best_position, best_value, iteration_best_values = pso_optimizer_linear(linear_function, bounds, num_dimensions, num_particles)
 
 print("最优解 x:", best_position)
 print("最优值 f(x):", best_value)
+# 绘制目标函数值随迭代次数的变化曲线
+plt.plot(iteration_best_values)
+plt.xlabel('Iteration')
+plt.ylabel('Objective Function Value')
+plt.title('Particle Swarm Optimization')
+plt.grid(True)
+plt.show()

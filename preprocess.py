@@ -21,8 +21,7 @@ def Preprocess_RandomForest(fpath):
     '''
 
     # 提取特征和目标变量
-    #X = df_interpolated.drop(columns=['钻时(min/m)', '套压(Mpa)', '转盘转速(r/min)', '纯钻时间h', '井深（m）'])
-    X = df_interpolated.drop(columns=['钻时(min/m)', '套压(Mpa)', '转盘转速(r/min)', '纯钻时间h'])
+    X = df_interpolated.drop(columns=['钻时(min/m)', '套压(Mpa)', '转盘转速(r/min)', '纯钻时间h', '井深（m）', '垂深'])
     y = df_interpolated['钻时(min/m)']
 
     # 输出特征名称索引
@@ -38,8 +37,9 @@ def Preprocess_RandomForest(fpath):
     # 建立模型
     rf_regressor = RandomForestRegressor(n_estimators=100, random_state=random.randint(1, 1000))
 
+    #X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2,random_state=random.randint(1, 1000))  # 划分训练集和测试集
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2,
-                                                        random_state=random.randint(1, 1000))  # 划分训练集和测试集
+                                                        random_state=42)  # 划分训练集和测试集
     # 归一化
     #scaler = StandardScaler()
     #X_scaled = scaler.fit_transform(X_train)
@@ -63,7 +63,7 @@ def Preprocess_RandomForest(fpath):
     '''
     # 选择重要性大于阈值的特征
     threshold = np.mean(feature_importances)  # 阈值设置为平均值
-    # threshold = 0.05 # 自定义阈值
+    #threshold = 0.05 # 自定义阈值
     #print("threshold:", threshold)
     selected_features_indexs = [index for index, importance in enumerate(feature_importances) if importance > threshold]
     '''

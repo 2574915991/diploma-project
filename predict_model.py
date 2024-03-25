@@ -13,7 +13,8 @@ def Pre_LinearRegression(fpath):
     # 预处理
     X_selected, y = Preprocess_RandomForest(fpath)
     # 划分训练集和测试集
-    X_train, X_test, y_train, y_test = train_test_split(X_selected, y, test_size=0.2, random_state=random.randint(1, 1000))
+    #X_train, X_test, y_train, y_test = train_test_split(X_selected, y, test_size=0.2, random_state=random.randint(1, 1000))
+    X_train, X_test, y_train, y_test = train_test_split(X_selected, y, test_size=0.2,random_state=42)
     '''
     # 预测部分
     # 实例化 SGDRegressor 类，并设置参数,构建梯度下降优化的线性回归模型
@@ -53,7 +54,7 @@ def Pre_LinearRegression(fpath):
     # 优化更新公式theta_i+1 = theta_i - learning_rate * gradient
     def optimize_theta(X_with_intercept, y_train, theta):
         # 设置梯度下降参数
-        learning_rate = 1e-8  # 学习率
+        learning_rate = 1e-6  # 学习率
         max_iter = 1000  # 迭代次数
         tolerance = 1e-5
         # 梯度下降优化
